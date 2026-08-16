@@ -4,7 +4,7 @@ on:
   schedule:
     # UTC 00:00 等於台灣時間早上 08:00
     - cron: '0 0 * * *'
-  workflow_dispatch: # 支援在 Actions 頁面點擊按鈕手動測試
+  workflow_dispatch: # 支援在 Actions 頁面手動點擊按鈕測試
 
 jobs:
   send-reminder:
@@ -20,8 +20,8 @@ jobs:
 
       - name: Run Reminder Script
         env:
-          EMAILJS_SERVICE_ID: ${{service_ceeofp8}}
-          EMAILJS_TEMPLATE_ID: ${{template_6dhzpy8}}
-          EMAILJS_PUBLIC_KEY: ${{gYTMIU5nVqBIGi_7q}}
-          EMAILJS_RECIPIENT: ${{12001@cyvs.tyc.edu.tw}}
+          EMAILJS_SERVICE_ID: 'service_ceeofp8'
+          EMAILJS_TEMPLATE_ID: 'template_6dhzpy8'
+          EMAILJS_PUBLIC_KEY: 'gYTMIU5nVqBIGi_7q'
+          EMAILJS_RECIPIENT: '12001@cyvs.tyc.edu.tw'
         run: node send-reminders.js
