@@ -20,7 +20,7 @@ jobs:
 
       - name: Run Reminder Script
         env:
-          EMAILJS_SERVICE_ID: ${{gYTMIU5nVqBIGi_7q}}
+          EMAILJS_SERVICE_ID: ${{service_ceeofp8}}
           EMAILJS_TEMPLATE_ID: ${{template_6dhzpy8}}
           EMAILJS_PUBLIC_KEY: ${{gYTMIU5nVqBIGi_7q}}
           EMAILJS_RECIPIENT: ${{12001@cyvs.tyc.edu.tw}}
