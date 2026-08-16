@@ -20,8 +20,8 @@ jobs:
 
       - name: Run Reminder Script
         env:
-          EMAILJS_SERVICE_ID: ${{ secrets.EMAILJS_SERVICE_ID }}
-          EMAILJS_TEMPLATE_ID: ${{ secrets.EMAILJS_TEMPLATE_ID }}
-          EMAILJS_PUBLIC_KEY: ${{ secrets.EMAILJS_PUBLIC_KEY }}
-          EMAILJS_RECIPIENT: ${{ secrets.EMAILJS_RECIPIENT }}
+          EMAILJS_SERVICE_ID: ${{gYTMIU5nVqBIGi_7q}}
+          EMAILJS_TEMPLATE_ID: ${{template_6dhzpy8}}
+          EMAILJS_PUBLIC_KEY: ${{gYTMIU5nVqBIGi_7q}}
+          EMAILJS_RECIPIENT: ${{12001@cyvs.tyc.edu.tw}}
         run: node send-reminders.js
