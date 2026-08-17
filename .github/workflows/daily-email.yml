@@ -2,9 +2,9 @@ name: Daily Email Reminder Cron
 
 on:
   schedule:
-    # UTC 00:00 等於台灣時間早上 08:00
-    - cron: '0 0 * * *'
-  workflow_dispatch: # 支援在 Actions 頁面手動點擊按鈕測試
+    # UTC 00:15 等於台灣時間早上 08:15（避開整點佇列塞車）
+    - cron: '15 0 * * *'
+  workflow_dispatch:
 
 jobs:
   send-reminder:
