@@ -7,29 +7,38 @@ const EMAILJS_RECIPIENT = process.env.EMAILJS_RECIPIENT;
 
 async function checkAndSendReminders() {
   try {
+    console.log("🔍 開始讀取 Firebase 資料庫...");
     const res = await fetch(FIREBASE_DB_URL);
     const data = await res.json();
-    if (!data) return console.log("資料庫為空，結束流程。");
+
+    if (!data) {
+      console.log("⚠️ 資料庫為空，結束流程。");
+      return;
+    }
 
     const docs = Object.values(data);
+    console.log(`📊 成功讀取資料庫，共有 ${docs.length} 筆公文紀錄。`);
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
     // 篩選 7 天內到期或已逾期且未辦結的公文
     const urgentDocs = docs.filter(doc => {
       if (doc.isCompleted) return false;
+      if (!doc.deadline) return false;
       const target = new Date(doc.deadline);
       target.setHours(0, 0, 0, 0);
       const diffDays = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
       return diffDays <= 7;
     });
 
+    console.log(`🚨 符合「7天內到期或逾期未辦結」的公文共有 ${urgentDocs.length} 筆。`);
+
     if (urgentDocs.length === 0) {
-      console.log("🎉 今日無逾期或即期公文，無需發送 Email。");
+      console.log("🎉 今日無即期待辦公文，不觸發 EmailJS 發送。");
       return;
     }
 
-    // 彙總公文資訊
     const summaryText = urgentDocs.map((doc, idx) => {
       return `${idx + 1}. [${doc.no}] ${doc.subject}\n   - 期限：${doc.deadline}\n   - 內容：${doc.content || '無'}`;
     }).join('\n\n');
@@ -43,7 +52,7 @@ async function checkAndSendReminders() {
       doc_content: summaryText
     };
 
-    // 發送至 EmailJS REST API
+    console.log("✉️ 正發送 API 請求給 EmailJS...");
     const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -56,13 +65,15 @@ async function checkAndSendReminders() {
     });
 
     if (response.ok) {
-      console.log(`✉️ 成功自動寄送 ${urgentDocs.length} 筆公文催辦通知！`);
+      console.log(`✅ EmailJS 發送成功！已寄出 ${urgentDocs.length} 筆催辦通知！`);
     } else {
       const errText = await response.text();
-      console.error('❌ Email 發送失敗：', errText);
+      console.error(`❌ EmailJS 發送失敗 (HTTP ${response.status})：`, errText);
+      process.exit(1);
     }
   } catch (err) {
-    console.error('❌ 執行過程中出錯：', err);
+    console.error('❌ 執行過程發生錯誤：', err);
+    process.exit(1);
   }
 }
 
