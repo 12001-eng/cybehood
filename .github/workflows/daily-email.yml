@@ -2,7 +2,7 @@ name: Daily Email Reminder Cron
 
 on:
   schedule:
-    # UTC 00:15 等於台灣時間早上 08:15（避開整點佇列塞車）
+    # UTC 00:15 等於台灣時間早上 08:15（避開整點高峰）
     - cron: '15 0 * * *'
   workflow_dispatch:
 
@@ -11,12 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Run Reminder Script
         env:
